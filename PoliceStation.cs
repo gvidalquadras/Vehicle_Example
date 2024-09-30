@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.ConstrainedExecution;
 
 namespace Practice1
 {
@@ -13,23 +14,35 @@ namespace Practice1
             alarmPlate = "";
         }
 
-        private void ShareAlarm()
+        public void ShareAlarm(string plateOffender)
         {
+            foreach (var car in PoliceCarRegister)
+            {
+                if (car.IsPatrolling())
+                {
+                    car.StartChasing(plateOffender);
+                }
+            }
+        }
+
+        public void AddPoliceCar(PoliceCar policeCar)
+        {
+            if (!PoliceCarRegister.Contains(policeCar))
+            {
+                PoliceCarRegister.Add(policeCar);
+            };
 
         }
 
-        private void AddPoliceCar(PoliceCar policeCar)
+        public void RemovePoliceCar(PoliceCar policeCar)
         {
-            PoliceCarRegister.Add(policeCar);
-
+            if (PoliceCarRegister.Contains(policeCar))
+            {
+                PoliceCarRegister.Remove(policeCar);
+            };
         }
 
-        private void RemovePoliceCar(PoliceCar policeCar)
-        {
-            PoliceCarRegister.Remove(policeCar);
-
-        }
-
+        
     }
 }
 

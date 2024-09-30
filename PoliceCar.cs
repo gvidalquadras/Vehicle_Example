@@ -5,9 +5,10 @@
         //constant string as TypeOfVehicle wont change allong PoliceCar instances
         private const string typeOfVehicle = "Police Car";
         private bool isPatrolling; 
-        private bool isChasing; 
+        private bool isChasing;
+        private string? plateOffender;
         private SpeedRadar speedRadar;
-        private PoliceStation station;
+        private PoliceStation? policeStation;
 
         public PoliceCar(string plate) : base(typeOfVehicle, plate)
         {
@@ -24,8 +25,9 @@
                 Console.WriteLine(WriteMessage($"Triggered radar. Result: {meassurement}"));
                 if (meassurement == "Catched above legal speed.")
                 {
-                    string plateMalo = vehicle.GetPlate();
-                    SendAlarm(plateMalo);
+                    string plateOffender = vehicle.GetPlate();
+                    SendAlarm(plateOffender);
+                    StartChasing();
                 }
             }
             else
@@ -44,16 +46,25 @@
             return isChasing;
         }
 
-        private void SendAlarm(string plate)
+        private void SendAlarm(string plateOffender)
         {
-
-
+            if (policeStation != null)
+            {
+                policeStation.ShareAlarm(plateOffender);
+            }
 
         }
 
-        private void StartChasing()
+        public void StartChasing(string plate)
         {
+            isChasing = true;
+            plateOffender = plate;
+        }
 
+        public void StopChasing()
+        {
+            isChasing = false;
+            plateOffender = null;
         }
 
         public void StartPatrolling()
