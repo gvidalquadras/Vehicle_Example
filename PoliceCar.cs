@@ -27,7 +27,7 @@
                 {
                     string plateOffender = vehicle.GetPlate();
                     SendAlarm(plateOffender);
-                    StartChasing();
+                    StartChasing(plateOffender);
                 }
             }
             else
