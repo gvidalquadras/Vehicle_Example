@@ -4,7 +4,7 @@ using System.Runtime.ConstrainedExecution;
 namespace Practice1
 {
 
-    class PoliceStation
+    class PoliceStation: IMessageWritter
     {
         public List<PoliceCar> PoliceCarRegister { get; private set; }
         private string alarmPlate;
@@ -14,7 +14,7 @@ namespace Practice1
             alarmPlate = "";
         }
 
-        public void ShareAlarm(string plateOffender)
+        public void ShareAlarm(string? plateOffender)
         {
             foreach (var car in PoliceCarRegister)
             {
@@ -23,6 +23,7 @@ namespace Practice1
                     car.StartChasing(plateOffender);
                 }
             }
+            Console.WriteLine(WriteMessage($"Alarm sent regarding offender with plate {plateOffender}."));
         }
 
         public void AddPoliceCar(PoliceCar policeCar)
@@ -31,6 +32,7 @@ namespace Practice1
             {
                 PoliceCarRegister.Add(policeCar);
             };
+            Console.WriteLine(WriteMessage($"{policeCar} has joined the station."));
 
         }
 
@@ -40,9 +42,15 @@ namespace Practice1
             {
                 PoliceCarRegister.Remove(policeCar);
             };
+            Console.WriteLine(WriteMessage($"{policeCar} has been removed from the station."));
         }
 
-        
+        //Implement interface with PoliceStation message structure
+        public string WriteMessage(string message)
+        {
+            return $"{this}: {message}";
+        }
+
     }
 }
 
