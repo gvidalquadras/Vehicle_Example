@@ -7,26 +7,27 @@
         private bool isPatrolling; 
         private bool isChasing;
         private string? plateOffender;
-        private SpeedRadar speedRadar;
+        private SpeedRadar? speedRadar;
         private PoliceStation? policeStation;
 
-        public PoliceCar(string plate) : base(typeOfVehicle, plate)
+        public PoliceCar(string plate, SpeedRadar? speedRadar = null) : base(typeOfVehicle, plate)
         {
             isPatrolling = false;
-            speedRadar = new SpeedRadar();
+            this.speedRadar = speedRadar?? new SpeedRadar();
         }
 
         public void UseRadar(Vehicle vehicle)
         {
-            if (isPatrolling)
+            if (isPatrolling && speedRadar != null)
             {
                 speedRadar.TriggerRadar(vehicle);
                 string meassurement = speedRadar.GetLastReading();
                 Console.WriteLine(WriteMessage($"Triggered radar. Result: {meassurement}"));
-                if (meassurement == "Catched above legal speed.")
+                if (meassurement == "Catched above legal speed." )
                 {
-                    string plateOffender = vehicle.GetPlate();
+                    string? plateOffender = vehicle.GetPlate();
                     SendAlarm(plateOffender);
+                    Console.WriteLine(WriteMessage("Alarm sent to police Station."));
                     StartChasing(plateOffender);
                 }
             }
@@ -46,7 +47,7 @@
             return isChasing;
         }
 
-        private void SendAlarm(string plateOffender)
+        private void SendAlarm(string? plateOffender)
         {
             if (policeStation != null)
             {
@@ -55,16 +56,18 @@
 
         }
 
-        public void StartChasing(string plate)
+        public void StartChasing(string? plate)
         {
             isChasing = true;
             plateOffender = plate;
+            Console.WriteLine(WriteMessage($"Started chasing car with plate {plate}."));
         }
 
         public void StopChasing()
         {
             isChasing = false;
             plateOffender = null;
+            Console.WriteLine(WriteMessage($"Stopped the chase."));
         }
 
         public void StartPatrolling()
@@ -95,11 +98,14 @@
 
         public void PrintRadarHistory()
         {
-            Console.WriteLine(WriteMessage("Report radar speed history:"));
-            foreach (float speed in speedRadar.SpeedHistory)
-            {
-                Console.WriteLine(speed);
+            if(speedRadar != null) {
+                Console.WriteLine(WriteMessage("Report radar speed history:"));
+                foreach (float speed in speedRadar.SpeedHistory)
+                {
+                    Console.WriteLine(speed);
+                }
             }
+            
         }
     }
 }
