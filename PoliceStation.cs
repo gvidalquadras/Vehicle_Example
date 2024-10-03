@@ -8,13 +8,17 @@ namespace Practice1
     {
         public List<PoliceCar> PoliceCarRegister { get; private set; }
         private string alarmPlate;
-        public PoliceStation()
+        private City city;
+        private string StationID { get; }
+        public PoliceStation( City city, string stationID)
         {
             PoliceCarRegister = new List<PoliceCar>();
             alarmPlate = "";
+            this.city = city;
+            StationID = stationID;
         }
 
-        public void ShareAlarm(string? plateOffender)
+        public void ShareAlarm(string plateOffender)
         {
             foreach (var car in PoliceCarRegister)
             {
@@ -31,6 +35,7 @@ namespace Practice1
             if (!PoliceCarRegister.Contains(policeCar))
             {
                 PoliceCarRegister.Add(policeCar);
+                policeCar.SetPoliceStation(this);
             };
             Console.WriteLine(WriteMessage($"{policeCar} has joined the station."));
 
@@ -41,10 +46,15 @@ namespace Practice1
             if (PoliceCarRegister.Contains(policeCar))
             {
                 PoliceCarRegister.Remove(policeCar);
+
             };
             Console.WriteLine(WriteMessage($"{policeCar} has been removed from the station."));
         }
 
+        public override string ToString()
+        {
+            return $"Police Station {StationID}";
+        }
         //Implement interface with PoliceStation message structure
         public string WriteMessage(string message)
         {
