@@ -1,6 +1,6 @@
 ﻿namespace Practice1
 {
-    class PoliceCar : Vehicle
+    class PoliceCar : WithPlateVehicle
     {
         //constant string as TypeOfVehicle wont change allong PoliceCar instances
         private const string typeOfVehicle = "Police Car";
@@ -8,15 +8,16 @@
         private bool isChasing;
         private string? plateOffender;
         private SpeedRadar? speedRadar;
-        private PoliceStation? policeStation;
+        private PoliceStation? policeStation { get; set; }
 
         public PoliceCar(string plate, SpeedRadar? speedRadar = null) : base(typeOfVehicle, plate)
         {
             isPatrolling = false;
-            this.speedRadar = speedRadar?? new SpeedRadar();
+            isChasing = false;
+            this.speedRadar = speedRadar;
         }
 
-        public void UseRadar(Vehicle vehicle)
+        public void UseRadar(WithPlateVehicle vehicle)
         {
             if (isPatrolling && speedRadar != null)
             {
@@ -47,7 +48,7 @@
             return isChasing;
         }
 
-        private void SendAlarm(string? plateOffender)
+        private void SendAlarm(string plateOffender)
         {
             if (policeStation != null)
             {
@@ -56,7 +57,7 @@
 
         }
 
-        public void StartChasing(string? plate)
+        public void StartChasing(string plate)
         {
             isChasing = true;
             plateOffender = plate;
@@ -107,5 +108,10 @@
             }
             
         }
-    }
+
+        public void SetPoliceStation(PoliceStation policeStation)
+        { this.policeStation = policeStation; }
+
+     
+}
 }
