@@ -1,10 +1,11 @@
 ﻿namespace Practice1
 {
-    class Taxi : Vehicle
+    class Taxi : WithPlateVehicle
     {
         //constant string as TypeOfVehicle wont change allong PoliceCar instances.
         private static string typeOfVehicle = "Taxi";
         private bool isCarryingPassengers;
+        private bool HasLicense;
 
         public Taxi(string plate) : base(typeOfVehicle, plate)
         {
@@ -40,5 +41,14 @@
                 Console.WriteLine(WriteMessage("is not on a ride."));
             }
         }
+
+        public void SetLicense()
+        { HasLicense = true; }
+
+        public void RemoveLicense()
+        { HasLicense = false; }
+
+        public bool GetHasLicense()
+        { return this.HasLicense; }
     }
 }
